@@ -3,6 +3,7 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
 
 const routes = require('./routes/')
 
@@ -12,16 +13,13 @@ app.set('view engine', 'pug');
 //sets a variable that the whole app can use
 app.locals.company = 'Pizza Shack';
 app.locals.body = {};
-app.locals.body.magic = ''
+app.locals.errors = {};
+
 
 //middlewares
 app.use(express.static('public'));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(routes);
-
-
-app.get('/contact', (req, res, next) => {
-	res.render('contact', {page: 'Contact'})
-})
 
 app.get('/order', (req, res, next) => {
 	res.render('order', {page: 'Order'})
@@ -32,7 +30,7 @@ app.get('/login', (req, res, next) => {
 })
 
 app.get('/register', (req, res, next) => {
-	res.render('/register', {page: 'Register'})
+	res.render('register', {page: 'Register'})
 })
 
 app.use((req, res) => {

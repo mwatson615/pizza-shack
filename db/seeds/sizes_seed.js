@@ -5,16 +5,15 @@ const sizes = require('./sizes');
 
 console.log('sizes', sizes);
 
-const sizePromises = [];
+const sizePromises = sizes.map(({name, inches}) => {
+  return knex('sizes').insert({name, inches});
+});
+
 exports.seed = function(knex, Promise) {
   // Deletes ALL existing entries
-  return knex('table_name').del()
-    .then(function () {
+  return knex('sizes').del()
+    .then( () => {
       // Inserts seed entries
-      return knex('table_name').insert([
-        {id: 1, colName: 'rowValue1'},
-        {id: 2, colName: 'rowValue2'},
-        {id: 3, colName: 'rowValue3'}
-      ]);
+      return Promise.all(sizePromises)
     });
 };
